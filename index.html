@@ -1,0 +1,157 @@
+<!-- <html>
+    <head>
+        <script>
+            var _hmt = _hmt || [];
+            (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?4bad1df23f079e0d12bdbef5e65b072f";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+            })();
+            window.location = 'https://ecomfe.github.io/zrenderDoc/public/';
+        </script>
+    </head>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SVG环形进度条</title>
+    <style>
+        #circleProcess {
+            position: relative;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 200px;
+
+            fill: none;
+            -webkit-transform: rotate(-90deg);
+            -moz-transform: rotate(-90deg);
+            -ms-transform: rotate(-90deg);
+            -o-transform: rotate(-90deg);
+            transform: rotate(-90deg);
+        }
+
+        #circle2 {
+            stroke-dasharray: 12, 314;
+            stroke-dashoffset: 0;
+            stroke-linecap: round;
+            transition: stroke-dasharray 0.6s ease 0s, stroke 0.6s ease 0s;
+        }
+
+        .my-svg-path {
+            stroke-dasharray: 0, 252.2px;
+            stroke-dashoffset: 0;
+            /* transition: stroke-dashoffset 0.6s ease 0s, stroke 0.6s ease 0s; */
+            transform: rotateZ(90deg);
+            transform-origin: 50% 50%;
+            transition: stroke-dasharray 0.6s ease 0s, stroke 0.6s ease 0s;
+        }
+/*stroke-dashoffset  这个属性是相对于起始点的偏移，正数偏移x值的时候，相当于往左移动了x个长度单位，负数偏移x的时候，相当于往右移动了x个长度单位。 */
+/*stroke-dasharray两个参数或者多个参数时：一个表示长度，一个表示间距 需要注意的是，不管偏移的方向是哪边，要记得dasharray 是循环的，也就是 虚线-间隔-虚线-间隔。
+这个属性要搭配stroke-dashoffset才能看得出来效果，非虚线的话，是无法看出偏移的。 */
+        #shape {
+            stroke-width: 6px;
+            fill: transparent;
+            stroke: #009FFD;
+            stroke-dasharray: 380, 380 ,20,30;
+            stroke-dashoffset: -380;
+            transition: 1s all ease
+        }
+
+        #shape:hover {
+            stroke-dasharray: 70 0;
+            stroke-width: 3px;
+            stroke-dashoffset: 0;
+            stroke: #06D6A0;
+           
+            /* stroke-dasharray: 380 0;
+            cursor: pointer; */
+        }
+    </style>
+</head>
+
+<body>
+    <div style="width: 200px;height: 200px; position: relative;">
+        <svg viewBox="0 0 100 100">
+            <path d="M 50 50 m -40 0 a 40 40 0 1 0 80 0  a 40 40 0 1 0 -80 0" class="path" fill="none" stroke="#e5e9f2"
+                stroke-width="10">
+                ></path>
+            <path d="M 50 50 m -40 0 a 40 40 0 1 0 80 0  a 40 40 0 1 0 -80 0" fill="none" stroke-dasharray="100"
+                stroke="#20a0ff" stroke-linecap="round" class="my-svg-path" transform="rotate(90,50,50)"
+                stroke-width="10">
+            </path>
+        </svg>
+        <div
+            style="width: 200px;height: 200px; text-align: center;line-height: 200px; position: absolute;top: 0;left: 0;">
+            百分<span class="percentage"></span>
+        </div>
+    </div>
+    <button class="click">点我</button>
+    <input type="number" value="" class="input">
+
+
+
+    <svg id="circleProcess" xmlns="http://www.w3.org/2000/svg">
+        <circle id="circle" cx="50%" cy="50%" r="50" stroke-width="10%" stroke="#e5e9f2"></circle>
+        <circle id="circle2" cx="50%" cy="50%" r="50" stroke-width="10%" stroke="#6FEC6F" ;></circle>
+    </svg>
+    <svg height="40" width="150"> 
+        <rect id="shape" height="40" width="150" stroke-dasharray="0,380"   stroke-width="5%" />
+    </svg>
+    <script>
+        // var circleProcess = document.getElementById("circleProcess");
+        // var circle = document.getElementById("circle");
+
+        // var rangeValue = 0;
+        // var cc;
+        // function setCircle() {
+        //     rangeValue = Number(rangeValue);
+        //     circle.setAttribute("stroke-dashoffset", (255 - rangeValue) + "%");
+        //     rangeValue += 1;
+        //     if (rangeValue == 240) {
+        //         clearInterval(cc);
+        //     }
+        //     console.log(rangeValue);
+        // }
+
+        // cc = setInterval("setCircle()", 1);
+
+    </script>
+
+    <script>
+        var btn = document.querySelector('.click')
+        var path = document.querySelector('.my-svg-path')
+        var input = document.querySelector('.input')
+        let percentage1 = document.querySelector('.percentage')
+
+        /**  
+            获取环状的总长度
+        **/
+
+        let len = path.getTotalLength()
+        console.log(len)
+
+        var style = 0
+        btn.addEventListener('click', function () {
+            /* 获取表单的值 取值是百分制度 */
+            let percentage = input.value
+            /* 通过百分制度 还原成具体px */
+            style = percentage / 100 * len
+            percentage1.innerText = percentage
+            console.log(style)
+            path.style.cssText = `stroke-dasharray:${style}px,${len}px`
+        })
+        input.addEventListener('input', painting)
+        function painting() {
+            let percentage = this.value
+            style = percentage / 100 * len
+            percentage1.innerText = percentage
+            path.style.cssText = `stroke-dasharray:${style}px,${len}px`
+        }
+    </script>
+</body>
+
+</html>
